@@ -17,5 +17,5 @@ function viewTargets(loc)
     
     % plot locations
     hold on
-    plot(loc(:,1), loc(:,2), 'x')
+    plot(loc(:,1), loc(:,2), 'x', 'markersize', 8)
 end

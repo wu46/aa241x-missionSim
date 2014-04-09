@@ -2,11 +2,12 @@
 function [t,xOut,yOut] = simFlight(varargin)
 % get helperfunctions
 sim = simulationHelpers;
+path = pathMakers;
 
 % units in metric
 % params governing flight: DEFAULT
-vc = 20; % velocity, m/s
-h = 100; % altitude, m
+vc = 10; % velocity, m/s
+h = 130; % altitude, m
 
 % constants
 MAX_TIME = 1000; % maximum time for simulation
@@ -36,33 +37,40 @@ targetsFound = [0 0 0 0];
 allFound = false;
 fov = sim.calcFOV(h);
 
+% %--------------------------------------------------------------------------
+% % PATH TYPE 1 - cicular sweep
+% % calc number of circular paths
+% overlap = 2; % overlap of two sweep paths in radius
+% fovEffective = fov - overlap;
+% nCircles = floor(LAKE_RADIUS / (fovEffective * 2));
+% wp = START_POS;
+% % First spiral, out to in
+% for i = 1:1:nCircles
+%     wpOneCircle = path.circularPath(wp(size(wp,1),:),...
+%         LAKE_RADIUS-(2*i-1)*fovEffective,...
+%         [0,0]);
+%     wp = [wp; wpOneCircle];
+% end
+% 
+% % center of lake
+% wp = [wp; 0,0];
+% 
+% % If still not found, second spiral, in to out
+% for i = nCircles-1:-1:0
+%     wpOneCircle = path.circularPath(wp(size(wp,1),:),...
+%         LAKE_RADIUS-2*i*fovEffective,...
+%         [0,0]);
+%     wp = [wp; wpOneCircle];
+% end
+% 
+% %--------------------------------------------------------------------------
+
 %--------------------------------------------------------------------------
-% PATH TYPE 1 - cicular sweep
-% calc number of circular paths
-overlap = 2; % overlap of two sweep paths in radius
-fovEffective = fov - overlap;
-nCircles = floor(LAKE_RADIUS / (fovEffective * 2));
-wp = START_POS;
-% First spiral, out to in
-for i = 1:1:nCircles
-    wpOneCircle = sim.circularPath(wp(size(wp,1),:),...
-        LAKE_RADIUS-(2*i-1)*fovEffective,...
-        [0,0]);
-    wp = [wp; wpOneCircle];
-end
-
-% center of lake
-wp = [wp; 0,0];
-
-% If still not found, second spiral, in to out
-for i = nCircles-1:-1:0
-    wpOneCircle = sim.circularPath(wp(size(wp,1),:),...
-        LAKE_RADIUS-2*i*fovEffective,...
-        [0,0]);
-    wp = [wp; wpOneCircle];
-end
-
+% PATH TYPE 2 - slow spiral
 %--------------------------------------------------------------------------
+START_POS = [0 -175];
+wp = path.spiralPath(START_POS, LAKE_RADIUS, [0,0], fov*1.8);
+
 
 %--------------------------------------------------------------------------
 % SIMULATION SETUP

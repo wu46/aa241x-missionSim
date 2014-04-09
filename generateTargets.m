@@ -24,7 +24,7 @@ loc = [];
 i = 0;
 while i < 4
     r = 175 * rand();
-    theta = 2*pi * rand();
+    theta = 2*pi * sqrt(rand());
     x = r * cos(theta);
     y = r * sin(theta);
     new = [x,y];

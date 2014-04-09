@@ -1,7 +1,6 @@
 function tools = simulationHelpers
 tools.reachedWp = @reachedWp;
 tools.calcNextHeading = @calcNextHeading;
-tools.circularPath = @circularPath;
 tools.calcFOV = @calcFOV;
 tools.isSighted = @isSighted;
 geo = geometryHelpers;
@@ -26,27 +25,10 @@ geo = geometryHelpers;
         %             currentPos, nextwp, heading_deg);
     end
 
-    function wp = circularPath(startPos, radius, center)
-        % Generate a bunch of waypoints in a circular shape around a specified
-        % center.
-        
-        % get current angle
-        num = startPos(2) - center(2);
-        den = startPos(1) - center(1);
-        theta_current = geo.atan_smart(num,den);
-        dtheta = 0.2;
-        if theta_current > 0
-            theta = [theta_current:dtheta:2*pi, 0:dtheta:theta_current]';
-        else
-            theta = [theta_current:dtheta:0, 0:dtheta:(2*pi+theta_current)]';
-        end
-        wp = radius * [cos(theta), sin(theta)] +...
-            [center(1) * ones(size(theta)), center(2) * ones(size(theta))];
-        
-    end
+    
 
     function fov = calcFOV(alt)
-        % FOV calculation
+        % FOV calculation, fov as radius in m
         p1 = [400*0.3028, 30];
         p2 = [100*0.3048, 15];
         m = (p1(1,2)-p2(1,2))/(p1(1,1)-p2(1,1));
