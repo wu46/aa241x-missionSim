@@ -4,6 +4,7 @@ function tools = geometryHelpers
 tools.atan_smart = @atan_smart;
 tools.calcDist = @calcDist;
 tools.makeThetaArray = @makeThetaArray;
+tools.randInCircle = @randInCircle;
     function y = atan_smart(num, den)
         if (abs(den) < 1e-6)
             den = 1e-6;
@@ -29,16 +30,18 @@ tools.makeThetaArray = @makeThetaArray;
         else
             theta = [theta_current:dtheta:0, 0:dtheta:(2*pi+theta_current)]';
         end
+    end
+
+    function [coords] = randInCircle(xc,yc,r)
+        % Stole this from Amanda:
+        % function [coords] = rand_in_circle(xc,yc,r)
+        % gives a random coordinate inside the circle with center (xc,yc) and
+        % radius r
+        theta = 2*pi*rand(1,1);
+        r = r*sqrt(rand(1,1));
         
-        % eeewww:
-        function y = atan_smart(num, den)
-            if (abs(den) < 1e-6)
-                den = 1e-6;
-            end
-            y = atan(num/den);
-            if (den < 0)
-                y = pi + y;
-            end
-        end
+        x = r.*cos(theta)+xc;
+        y = r.*sin(theta)+yc;
+        coords = [x y];
     end
 end
